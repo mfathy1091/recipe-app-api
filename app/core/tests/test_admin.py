@@ -5,7 +5,6 @@ from django.urls import reverse
 
 class AdminSiteTests(TestCase):
 
-
     def setUp(self):
         """Create user and client"""
         self.client = Client()

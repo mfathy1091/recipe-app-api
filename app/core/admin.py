@@ -7,5 +7,5 @@ class UserAdmin(BaseUserAdmin):
     ordering = ['id']
     list_display = ['email', 'name']
 
-admin.site.register(models.User, UserAdmin)
 
+admin.site.register(models.User, UserAdmin)
