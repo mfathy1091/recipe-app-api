@@ -14,7 +14,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Transaction(models.Model):
-    amount = models.DecimalField(max_digits=10,decimal_places=2, default=0)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
+class Transaction(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    date = models.DateField(blank=False, null=False)
+    notes = models.CharField(max_length=255, blank=True, null=False)

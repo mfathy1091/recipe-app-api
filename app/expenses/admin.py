@@ -7,6 +7,7 @@ from .models import Category, Transaction
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ("amount", "category")
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "type")
