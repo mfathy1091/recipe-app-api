@@ -15,8 +15,14 @@ class Category(models.Model):
         return self.name
 
 
+class TRANSACTION_TYPE(models.TextChoices):
+    debit = "debit", "Debit"
+    credit = "credit", "Credit"
+
+
 class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    type = models.CharField(max_length=30, choices=TRANSACTION_TYPE.choices, null=False, blank=False)
     date = models.DateField(blank=False, null=False)
     notes = models.CharField(max_length=255, blank=True, null=False)
