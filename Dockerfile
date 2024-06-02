@@ -20,11 +20,11 @@ RUN python -m venv /py && \
   then /py/bin/pip install -r /temp/requirements.dev.txt; \
   fi && \
   rm -rf /temp && \
-  apk del .temp-build-deps && \
-  adduser \
-  -D \
-  -H \
-  django-user
+  apk del .temp-build-deps
+# adduser \
+# -D \
+# -H \
+# django-user
 
 ENV PATH="/py/bin:$PATH"
-USER django-user
+# USER django-user
