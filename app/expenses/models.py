@@ -3,8 +3,8 @@ from django.db import models
 
 class CATEGORY_TYPE(models.TextChoices):
     expense = "expense", "Expense"
-    salary = "income", "Income"
-    bonus = "loan", "Loan"
+    income = "income", "Income"
+    Loan = "loan", "Loan"
 
 
 class Category(models.Model):
