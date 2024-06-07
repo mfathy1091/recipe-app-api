@@ -46,3 +46,17 @@ class Transaction(models.Model):
         self.account.balance -= self.amount
         self.account.save()
         super(Transaction, self).save(*args, **kwargs)
+
+
+class Transfer(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    date = models.DateField(blank=True, null=True)
+    from_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=False, related_name="transfers_out")
+    to_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=False, related_name="transfers_in")
+
+    def save(self, *args, **kwargs):
+        self.from_account.balance -= self.amount
+        self.from_account.save()
+        self.to_account.balance += self.amount
+        self.to_account.save()
+        super(Transfer, self).save(*args, **kwargs)
