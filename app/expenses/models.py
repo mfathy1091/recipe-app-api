@@ -23,6 +23,6 @@ class TRANSACTION_TYPE(models.TextChoices):
 class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    type = models.CharField(max_length=30, choices=TRANSACTION_TYPE.choices, null=False, blank=False)
-    date = models.DateField(blank=False, null=False)
+    type = models.CharField(max_length=30, choices=TRANSACTION_TYPE.choices, null=True, blank=True)
+    date = models.DateField(blank=True, null=True)
     notes = models.CharField(max_length=255, blank=True, null=False)
