@@ -15,4 +15,4 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ("name", "type")
+    list_display = ("name", "balance", "type")
