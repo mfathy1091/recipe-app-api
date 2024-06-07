@@ -43,9 +43,14 @@ class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.account.balance -= self.amount
-        self.account.save()
-        super(Transaction, self).save(*args, **kwargs)
+        with transaction.atomic():
+            if self.id is None:
+                if self.type == TRANSACTION_TYPE.debit:
+                    self.account.balance -= self.amount
+                elif self.type == TRANSACTION_TYPE.credit:
+                    self.account.balance += self.amount
+            self.account.save()
+            super(Transaction, self).save(*args, **kwargs)
 
 
 class Transfer(models.Model):
