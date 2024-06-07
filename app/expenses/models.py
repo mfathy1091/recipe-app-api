@@ -24,6 +24,9 @@ class Account(models.Model):
     name = models.CharField(max_length=30)
     type = models.CharField(max_length=30, choices=ACCOUNT_TYPE.choices)
 
+    def __str__(self):
+        return self.name
+
 
 class TRANSACTION_TYPE(models.TextChoices):
     debit = "debit", "Debit"
