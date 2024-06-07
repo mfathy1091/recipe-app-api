@@ -41,3 +41,8 @@ class Transaction(models.Model):
     date = models.DateField(blank=True, null=True)
     notes = models.CharField(max_length=255, blank=True, null=False)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.account.balance -= self.amount
+        self.account.save()
+        super(Transaction, self).save(*args, **kwargs)
