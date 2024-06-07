@@ -47,8 +47,14 @@ class Transaction(models.Model):
             if self.id is None:
                 if self.type == TRANSACTION_TYPE.debit:
                     self.account.balance -= self.amount
-                elif self.type == TRANSACTION_TYPE.credit:
+                else:
                     self.account.balance += self.amount
+            else:
+                old_transaction = Transaction.objects.get(id=self.id)
+                old_transaction_amount = old_transaction.amount
+                if old_transaction_amount != self.amount:
+                    diff = old_transaction_amount - self.amount
+                    self.account.balance += diff
             self.account.save()
             super(Transaction, self).save(*args, **kwargs)
 
