@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 
 class CATEGORY_TYPE(models.TextChoices):
@@ -55,8 +55,16 @@ class Transfer(models.Model):
     to_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=False, related_name="transfers_in")
 
     def save(self, *args, **kwargs):
-        self.from_account.balance -= self.amount
-        self.from_account.save()
-        self.to_account.balance += self.amount
-        self.to_account.save()
-        super(Transfer, self).save(*args, **kwargs)
+        with transaction.atomic():
+            if self.id is None:
+                self.from_account.balance -= self.amount
+                self.to_account.balance += self.amount
+            else:
+                old_transfer_amount = Transfer.objects.get(id=self.id).amount
+                if old_transfer_amount != self.amount:
+                    diff = old_transfer_amount - self.amount
+                    self.from_account.balance += diff
+                    self.to_account.balance -= diff
+            self.from_account.save()
+            self.to_account.save()
+            super(Transfer, self).save(*args, **kwargs)
