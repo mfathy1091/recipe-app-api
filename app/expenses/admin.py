@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Transaction
+from .models import Account, Category, Transaction
 
 
 @admin.register(Transaction)
@@ -10,4 +10,9 @@ class TransactionAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "type")
+
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
     list_display = ("name", "type")
