@@ -15,6 +15,16 @@ class Category(models.Model):
         return self.name
 
 
+class ACCOUNT_TYPE(models.TextChoices):
+    cash = "cash", "Cash"
+    credit_card = "credit_card", "Credit Card"
+
+
+class Account(models.Model):
+    name = models.CharField(max_length=30)
+    type = models.CharField(max_length=30, choices=ACCOUNT_TYPE.choices)
+
+
 class TRANSACTION_TYPE(models.TextChoices):
     debit = "debit", "Debit"
     credit = "credit", "Credit"
@@ -26,13 +36,4 @@ class Transaction(models.Model):
     type = models.CharField(max_length=30, choices=TRANSACTION_TYPE.choices, null=True, blank=True)
     date = models.DateField(blank=True, null=True)
     notes = models.CharField(max_length=255, blank=True, null=False)
-
-
-class ACCOUNT_TYPE(models.TextChoices):
-    cash = "cash", "Cash"
-    credit_card = "credit_card", "Credit Card"
-
-
-class Account(models.Model):
-    name = models.CharField(max_length=30)
-    type = models.CharField(max_length=30, choices=ACCOUNT_TYPE.choices)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
