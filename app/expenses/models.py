@@ -45,18 +45,25 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         with transaction.atomic():
             if self.id is None:
-                if self.type == TRANSACTION_TYPE.debit:
-                    self.account.balance -= self.amount
-                else:
-                    self.account.balance += self.amount
+                self._update_balance_on_create()
             else:
-                old_transaction = Transaction.objects.get(id=self.id)
-                old_transaction_amount = old_transaction.amount
-                if old_transaction_amount != self.amount:
-                    diff = old_transaction_amount - self.amount
-                    self.account.balance += diff
+                self._update_balance_on_update()
+
             self.account.save()
             super(Transaction, self).save(*args, **kwargs)
+
+    def _update_balance_on_create(self):
+        if self.type == TRANSACTION_TYPE.debit:
+            self.account.balance -= self.amount
+        else:
+            self.account.balance += self.amount
+
+    def _update_balance_on_update(self):
+        old_transaction = Transaction.objects.get(id=self.id)
+        old_transaction_amount = old_transaction.amount
+        if old_transaction_amount != self.amount:
+            diff = old_transaction_amount - self.amount
+            self.account.balance += diff
 
 
 class Transfer(models.Model):
